@@ -1,7 +1,7 @@
 import asyncio
 import time
 import requests
-import aiohttp
+import aiohttp # async version of requests
 
 
 async def get_url_response(url):

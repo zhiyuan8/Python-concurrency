@@ -1,15 +1,34 @@
-# Python Concurrency
+# Python concurrency and parallelism
 Notes:
 - [Notion Study notes](https://www.notion.so/Python-Java-Concurrency-b883552932a44086bbe859f88851ed28?pvs=4)
 - [Udemy course](https://www.udemy.com/course/concurrent-and-parallel-programming-in-python/learn/lecture/28328244#overview)
 - [Udemy course code](https://github.com/PacktPublishing/Concurrent-and-Parallel-Programming-in-Python/tree/main)
 
 - **Multiprocessing:** Utilizes multiple processes to execute tasks in parallel.
+    - **Pool:** A multiprocessing pool that manages a set of worker processes.
+
 - **Multithreading:** Employs multiple threads within the same process, sharing memory space. The Python Global Interpreter Lock (GIL) limits the effectiveness of multithreading with regards to multi-core CPU utilization.
+    - **Lock:** A synchronization primitive
+    - **Semaphore:** A synchronization primitive that limits the number of threads that can access a resource.
+    
+
 - **Multiprocessing vs Multithreading:**
   - **Memory Space:** Multiprocessing uses separate memory for each process, whereas multithreading shares memory within the process.
   - **Overhead:** Process creation and context switching have a higher overhead in multiprocessing.
   - **Use Case:** Multiprocessing is preferred for CPU-bound tasks, and multithreading is suited for I/O-bound tasks.
+
+- **asynchronous**
+    - **asyncio:** Python's built-in library for asynchronous I/O, providing an event loop and coroutines.
+    - **async/await:** Syntax for defining asynchronous functions and awaiting asynchronous operations.
+    - **aiohttp:** Asynchronous HTTP Client/Server framework that supports async/await syntax.
+
+
+# Multiprocessing
+- Python `multiprocessing` module
+    - `Pool`
+    - `cpu_count`
+- Python `functiontools` module
+    - `partial`
 
 # Python multi-threading
 - threading.active_count() returns the number of active threads in the current process.
@@ -162,19 +181,27 @@ prime_numbers: [2, 3, 5, 7, 11, 13, 17, 19]
 YAML is also crucial in orchestration, aiding in the management and coordination of complex systems and workflows.
 
 
-# Multiprocessing
-- Python `multiprocessing` module
-    - `Pool`
-    - `cpu_count`
-- Python `functiontools` module
-    - `partial`
+# AsyncIO & multithreading
+- [python asyncio](https://docs.python.org/3/library/asyncio.html)
+- [python socket](https://docs.python.org/3/library/socket.html)
+- [Python Coroutines and Tasks](https://docs.python.org/3/library/asyncio-task.html)
 
-# AsyncIO & Async/Await, Coroutines and Tasks
+- coroutine
+    - timeout
+- asyncio
+    - create_task
+    - sleep
+    - tasks
+    - gather
+    - wait
+    - shield
+- asyncio
+- aiohttp
 
 
 ### Python `aiohttp` module
-
 `aiohttp` is an asynchronous HTTP Client/Server framework that supports async/await syntax.
+
 
 ### Python Webscraper
 
