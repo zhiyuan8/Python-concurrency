@@ -163,9 +163,11 @@ YAML is also crucial in orchestration, aiding in the management and coordination
 
 
 # Multiprocessing
-
-### Python `multiprocessing` module
-
+- Python `multiprocessing` module
+    - `Pool`
+    - `cpu_count`
+- Python `functiontools` module
+    - `partial`
 
 # AsyncIO & Async/Await, Coroutines and Tasks
 
