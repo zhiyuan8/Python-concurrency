@@ -4,7 +4,6 @@ Notes:
 - [Udemy course](https://www.udemy.com/course/concurrent-and-parallel-programming-in-python/learn/lecture/28328244#overview)
 - [Udemy course code](https://github.com/PacktPublishing/Concurrent-and-Parallel-Programming-in-Python/tree/main)
 
-## Python concurrency
 - **Multiprocessing:** Utilizes multiple processes to execute tasks in parallel.
 - **Multithreading:** Employs multiple threads within the same process, sharing memory space. The Python Global Interpreter Lock (GIL) limits the effectiveness of multithreading with regards to multi-core CPU utilization.
 - **Multiprocessing vs Multithreading:**
@@ -12,7 +11,10 @@ Notes:
   - **Overhead:** Process creation and context switching have a higher overhead in multiprocessing.
   - **Use Case:** Multiprocessing is preferred for CPU-bound tasks, and multithreading is suited for I/O-bound tasks.
 
-The `threading` module in Python allows for the creation and management of threads for concurrent execution.
+# Python multi-threading
+- threading.active_count() returns the number of active threads in the current process.
+- threading.acquire() and threading.release() can be used to acquire and release locks.
+- with statement can be used to acquire and release locks in a more concise manner. use this more often than acquire and release.
 
 <details>
 <summary>Basic threading example</summary>
@@ -69,39 +71,6 @@ for thread in threads:
 
 </details>
 
-
-### 2. YAML
-
-Explore YAML, a human-friendly data serialization standard used in configurations and data processing.
-
-- [yaml tutorial with Python](https://python.land/data-processing/python-yaml)
-
-YAML enables storing multiple documents within a single file using the `---` separator, commonly used in Kubernetes definitions. YAML is widely used for configuration files and data serialization. It's easy to read and write, making it ideal for both developers and machines.
-
-An example config.yaml:
-```
-rest:
-  url: "https://example.org/primenumbers/v1"
-  port: 8443
-
-prime_numbers: [2, 3, 5, 7, 11, 13, 17, 19]
-```
-
-```
-{'rest': 
-  { 'url': 'https://example.org/primenumbers/v1',
-    'port': 8443
-  },
-  'prime_numbers': [2, 3, 5, 7, 11, 13, 17, 19]
-}
-```
-
-YAML is also crucial in orchestration, aiding in the management and coordination of complex systems and workflows.
-
-## 3. Python Multi-threading
-- threading.active_count() returns the number of active threads in the current process.
-- threading.acquire() and threading.release() can be used to acquire and release locks.
-- with statement can be used to acquire and release locks in a more concise manner. use this more often than acquire and release.
 
 <details>
 <summary>Custom thread class example</summary>
@@ -164,7 +133,42 @@ if __name__ == "__main__":
   ```
 </details>
 
+# YAML
+
+Explore YAML, a human-friendly data serialization standard used in configurations and data processing.
+
+- [yaml tutorial with Python](https://python.land/data-processing/python-yaml)
+
+YAML enables storing multiple documents within a single file using the `---` separator, commonly used in Kubernetes definitions. YAML is widely used for configuration files and data serialization. It's easy to read and write, making it ideal for both developers and machines.
+
+An example config.yaml:
+```
+rest:
+  url: "https://example.org/primenumbers/v1"
+  port: 8443
+
+prime_numbers: [2, 3, 5, 7, 11, 13, 17, 19]
+```
+
+```
+{'rest': 
+  { 'url': 'https://example.org/primenumbers/v1',
+    'port': 8443
+  },
+  'prime_numbers': [2, 3, 5, 7, 11, 13, 17, 19]
+}
+```
+
+YAML is also crucial in orchestration, aiding in the management and coordination of complex systems and workflows.
+
+
 # Multiprocessing
+
+### Python `multiprocessing` module
+
+
+# AsyncIO & Async/Await, Coroutines and Tasks
+
 
 ### Python `aiohttp` module
 
