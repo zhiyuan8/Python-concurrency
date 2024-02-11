@@ -1,9 +1,13 @@
 queues:
   - name: SymbolQueue
     dscription: contains symbols to be scraped from yahoo finance
+    # This queue stores stock symbols (like AAPL, MSFT) that need to be fetched from Yahoo Finance. 
+    # Workers will read symbols from this queue to know which stocks' data to scrape.
 
   - name: PostgresUploading
     description: contains data that needs to be uploaded to postgres
+    # This queue holds the stock data that has been scraped and is ready to be uploaded to a PostgreSQL database.
+    # It acts as a buffer between data collection and database insertion processes.
 
 workers:
   - name: WikiWorker
@@ -16,6 +20,9 @@ workers:
       - 'https://en.wikipedia.org/wiki/List_of_S%26P_500_companies'
     output_queues:
       - SymbolQueue
+    # WikiWorker is designed to scrape a Wikipedia page listing S&P 500 companies to extract stock symbols.
+    # It's critical to run only one instance to avoid duplicate scraping of the same symbol.
+    # The symbols extracted are then passed to the SymbolQueue for further processing.
 
   - name: YahooFinanceWorker
     description: pulls price data for a specific stock symbol from yahoo finance
@@ -25,6 +32,9 @@ workers:
     input_queue: SymbolQueue
     output_queues:
       - PostgresUploading
+    # YahooFinanceWorker is responsible for fetching the current price data of stock symbols from Yahoo Finance.
+    # It takes input from the SymbolQueue, fetches data, and then passes the data to PostgresUploading queue.
+    # Running multiple instances allows parallel processing of multiple stock symbols to increase efficiency.
 
   - name: PostgresWorker
     description: take stock data and save in postgres
@@ -32,3 +42,5 @@ workers:
     class: PostgresMasterScheduler
     instances: 6
     input_queue: PostgresUploading
+    # PostgresWorker takes the stock data from the PostgresUploading queue and saves it into a PostgreSQL database.
+    # Multiple instances of this worker are used to handle high volumes of data efficiently, ensuring rapid data storage.

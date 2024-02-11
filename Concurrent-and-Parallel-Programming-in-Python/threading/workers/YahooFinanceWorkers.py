@@ -45,8 +45,17 @@ class YahooFinacePriceWorker():
     def get_price(self):
         r = requests.get(self._url)
         if r.status_code != 200:
-            return
+            print(f"Failed to fetch data for {self._symbol}, HTTP status code: {r.status_code}")
+            return None
         page_contents = html.fromstring(r.text)
-        raw_price = page_contents.xpath('//*[@id="quote-header-info"]/div[3]/div[1]/div/span[1]')[0].text
-        price = float(raw_price.replace(',', ''))
-        return price
+        try:
+            raw_price = page_contents.xpath('//*[@id="quote-header-info"]/div[3]/div[1]/div/span[1]/text()')[0]
+            price = float(raw_price.replace(',', ''))
+            return 0
+        except IndexError:
+            print(f"Price element not found for {self._symbol} using the provided XPath.")
+            return 404
+        except ValueError:
+            print(f"Failed to convert price to float for {self._symbol}. Raw price: {raw_price}")
+            return 404
+

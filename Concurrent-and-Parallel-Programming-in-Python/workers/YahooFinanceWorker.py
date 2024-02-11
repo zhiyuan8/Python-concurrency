@@ -10,7 +10,7 @@ from lxml import html
 
 class YahooFinancePriceScheduler(threading.Thread):
     def __init__(self, input_queue, output_queue, **kwargs):
-        super(YahooFinancePriceScheduler, self).__init__(**kwargs)
+        super(YahooFinancePriceScheduler, self).__init__(**kwargs) # ensure that the parent class is initialized
         self._input_queue = input_queue
         temp_queue = output_queue
         if type(temp_queue) != list:

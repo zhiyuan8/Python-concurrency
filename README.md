@@ -15,10 +15,27 @@
 Create a `Threading.Thread` object and call the `start` method to start the thread. The `run` method is called when the `start` method is called. The `join` method is used to wait for the thread to finish.
 
 ```python
+
 ```
 
 Below is an example to create customized thread class and use it to create threads.
 ```python
+
+```
+
+## YAML
+- [yaml tutorial with Python](https://python.land/data-processing/python-yaml)  
+
+### Basics
+YAML is a human-friendly data serialization language for all programming languages. YAML is perfect for configuration files. Use `pyyaml` package to work with YAML files in Python. Use `safe_load` method to load a YAML file and `safe_dump` method to write a YAML file.
+
+```python
+import yaml
+
+```
+### YAML for Orchestration
+Orchestration is the coordination and management of multiple computer systems, applications and/or services, stringing together multiple tasks in order to execute a larger workflow or process.
+```
 ```
 
 ## Python webscrawler

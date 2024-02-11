@@ -5,7 +5,7 @@ from yaml_reader import YamlPipelineExecutor
 
 
 def main():
-    pipeline_location = os.environ.get('PIPELINE_LOCATION')
+    pipeline_location = os.environ.get('PIPELINE_LOCATION', "pipelines/wiki_yahoo_scraper_pipeline.yaml")
     if pipeline_location is None:
         print('Pipeline location not defined')
         exit(1)
