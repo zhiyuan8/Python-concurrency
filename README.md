@@ -4,8 +4,7 @@ Notes:
 - [Udemy course](https://www.udemy.com/course/concurrent-and-parallel-programming-in-python/learn/lecture/28328244#overview)
 - [Udemy course code](https://github.com/PacktPublishing/Concurrent-and-Parallel-Programming-in-Python/tree/main)
 
-## Topics
-### 1. Python concurrency
+## Python concurrency
 - **Multiprocessing:** Utilizes multiple processes to execute tasks in parallel.
 - **Multithreading:** Employs multiple threads within the same process, sharing memory space. The Python Global Interpreter Lock (GIL) limits the effectiveness of multithreading with regards to multi-core CPU utilization.
 - **Multiprocessing vs Multithreading:**
@@ -69,12 +68,6 @@ for thread in threads:
 ```
 
 </details>
-
-
-### Queues and Master Scheduler
-Queues can be used for inter-thread or inter-process communication, allowing tasks to be distributed among workers in a controlled, thread-safe manner. Python's queue.Queue is suitable for multithreading scenarios, while multiprocessing.Queue should be used for multiprocessing contexts.
-
-### Locking and race conditions
 
 
 ### 2. YAML
@@ -170,6 +163,8 @@ if __name__ == "__main__":
 
   ```
 </details>
+
+# Multiprocessing
 
 ### Python `aiohttp` module
 

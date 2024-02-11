@@ -2,36 +2,41 @@ import threading
 import time
 import queue
 
-# Function to simulate tasks
 def worker(q):
     while True:
         item = q.get()
         if item is None:
-            break  # End the loop if None is received
+            q.task_done()
+            break
         print(f"Processing item: {item}")
         time.sleep(1)  # Simulate task duration
         q.task_done()
 
-# Create a queue instance
-task_queue = queue.Queue()
+def main():
+    task_queue = queue.Queue()
+    num_worker_threads = 3
 
-# Create worker threads
-num_worker_threads = 3
-threads = []
-for i in range(num_worker_threads):
-    t = threading.Thread(target=worker, args=(task_queue,))
-    t.start()
-    threads.append(t)
+    # Create and start worker threads
+    threads = []
+    for _ in range(num_worker_threads):
+        t = threading.Thread(target=worker, args=(task_queue,))
+        t.start()
+        threads.append(t)
 
-# Enqueue tasks
-for item in range(10):
-    task_queue.put(item)
+    # Enqueue tasks
+    for item in range(10):
+        task_queue.put(item)
 
-# Block until all tasks are done
-task_queue.join()
+    # Block until all tasks are done
+    task_queue.join()
 
-# Stop workers
-for i in range(num_worker_threads):
-    task_queue.put(None)
-for t in threads:
-    t.join()
+    # Stop workers by sending a stop signal
+    for _ in range(num_worker_threads):
+        task_queue.put(None)
+
+    # Wait for all threads to complete
+    for t in threads:
+        t.join()
+
+if __name__ == "__main__":
+    main()
