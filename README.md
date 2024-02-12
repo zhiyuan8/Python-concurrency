@@ -20,6 +20,7 @@ Notes:
 - **asynchronous**
     - **asyncio:** Python's built-in library for asynchronous I/O, providing an event loop and coroutines.
     - **async/await:** Syntax for defining asynchronous functions and awaiting asynchronous operations.
+        - blocking call (`time.sleep(1)`), non-blocking call (`await asyncio.sleep(1)`)
     - **aiohttp:** Asynchronous HTTP Client/Server framework that supports async/await syntax.
 
 
@@ -27,6 +28,7 @@ Notes:
 - Python `multiprocessing` module
     - `Pool`
     - `cpu_count`
+    - await
 - Python `functiontools` module
     - `partial`
 

@@ -1,37 +1,52 @@
 import asyncio
 import time
 import os
-import threading  # Import the threading module to access thread-related utilities
+import multiprocessing
 
-async def async_sleep(n): # Coroutine 1
-    pid = os.getpid()  # Get the current process ID
-    thread_id = threading.get_native_id()  # Get the current thread ID
-    print(f"PID: {pid}, Thread ID: {thread_id} - Start sleeping for {n} seconds")
-    await asyncio.sleep(n) # non-blocking sleep
-    print(f"PID: {pid}, Thread ID: {thread_id} - Finished sleeping")
-    return n
 
-async def main(): # Coroutine 2
-    # step 1
-    # You create initial tasks for sleeping different durations (1 to 10 seconds) and add them to a set named pending.
-    pending = set()
-    for i in range(1,11):
-        pending.add(asyncio.create_task(async_sleep(i)))
-    
-    add_task = True
-    
-    while len(pending) > 0:
-        # it waits for at least one of the pending tasks to complete
-        done, pending = await asyncio.wait(pending, return_when=asyncio.FIRST_COMPLETED)
-        # As tasks complete (starting with the shortest sleep), they are moved to the done set, and their completion is announced.
-        for done_task in done:
-            print(f"Task {done_task.result()} is complete")
-            if add_task:
-                # After the first task completes, you add one additional task with a 1-second sleep. This is added only once due to the add_task flag ensuring it's a one-time operation.
-                pending.add(asyncio.create_task(async_sleep(1)))
-                add_task = False
+class MultiprocessingAsync(multiprocessing.Process):
+    def __init__(self, durations):
+        super().__init__()
+        self._durations = durations
+
+    @staticmethod
+    async def async_sleep(duration):  # Coroutine 1
+        pid = os.getpid()  # Get the current process ID
+        print(f"PID: {pid} - Start sleeping for {duration} seconds")
+        await asyncio.sleep(duration)  # non-blocking sleep
+        print(
+            f"PID: {pid} - Finished sleeping"
+        )  # you expect to see the same PID for all the tasks, as they are running in the same process
+        return duration
+
+
+    async def consecutive_sleeps(self):
+        # Create tasks for each duration and await their completion
+        tasks = [self.async_sleep(duration) for duration in self._durations]
+        for task in asyncio.as_completed(tasks):
+            result = await task
+            print(f"Task sleeping for {result} seconds is complete")
+
+
+    def run(self):
+        # Run the async event loop for consecutive_sleeps
+        asyncio.run(self.consecutive_sleeps())
+
 
 if __name__ == "__main__":
     start_time = time.time()
-    asyncio.run(main())
-    print(f"Program completed in {time.time() - start_time} seconds with PID: {os.getpid()}, Thread ID: {threading.get_native_id()}")
+    processes = []
+    durations_list = [[1, 2], [2, 3]]  # Example durations for each process
+
+    # Create and start a process for each set of durations
+    for durations in durations_list:
+        p = MultiprocessingAsync(durations)
+        processes.append(p)
+        p.start()
+
+    # Wait for all processes to complete
+    for p in processes:
+        p.join()
+
+    # Print the total execution time
+    print(f"Program completed in {time.time() - start_time} seconds with PID: {os.getpid()}")
