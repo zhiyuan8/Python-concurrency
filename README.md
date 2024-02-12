@@ -1,44 +1,112 @@
-# Python concurrency and parallelism
-Notes:
-- [Notion Study notes](https://www.notion.so/Python-Java-Concurrency-b883552932a44086bbe859f88851ed28?pvs=4)
+# Python concurrency
+Concurrency in Python is achieved through **Multiprocessing**, **Multithreading**, and **Asynchronous Programming**, each suited to different scenarios based on the nature of tasks and the desired efficiency.
+
+Referenes:
+- [Zack's Notion Study notes](https://www.notion.so/Python-Java-Concurrency-b883552932a44086bbe859f88851ed28?pvs=4)
 - [Udemy course](https://www.udemy.com/course/concurrent-and-parallel-programming-in-python/learn/lecture/28328244#overview)
-- [Udemy course code](https://github.com/PacktPublishing/Concurrent-and-Parallel-Programming-in-Python/tree/main)
+- [Udemy course github code](https://github.com/PacktPublishing/Concurrent-and-Parallel-Programming-in-Python/tree/main)
+- [Python multiprocessing official doc](https://docs.python.org/3/library/multiprocessing.html)
+- [Python threading official doc](https://docs.python.org/3/library/threading.html)
+- [Python asyncio official doc](https://docs.python.org/3/library/asyncio.html)
+- [Python Coroutines and Tasks](https://docs.python.org/3/library/asyncio-task.html)
+- [Python aiohttp](https://docs.aiohttp.org/en/stable/)
 
-- **Multiprocessing:** Utilizes multiple processes to execute tasks in parallel.
-    - **Pool:** A multiprocessing pool that manages a set of worker processes.
 
-- **Multithreading:** Employs multiple threads within the same process, sharing memory space. The Python Global Interpreter Lock (GIL) limits the effectiveness of multithreading with regards to multi-core CPU utilization.
-    - **Lock:** A synchronization primitive
-    - **Semaphore:** A synchronization primitive that limits the number of threads that can access a resource.
+### Multiprocessing
+
+Multiprocessing allows for parallel execution of tasks across multiple CPU cores, each process having its own memory space.
+
+- **Key Components:**
+  - **Pool**: Simplifies the process of spawning multiple tasks across processes. It provides a means to parallelize the execution of a function across multiple input values, distributing the input data across processes (data parallelism).
+    - **Usage**: `Pool` can be used to manage a pool of worker processes for tasks that are CPU-bound and require parallel execution to speed up the processing.
+  - **Process**: Represents an activity that is run in a separate process.
+  - **Pipe** and **Queue**: Mechanisms for inter-process communication (IPC). A `Pipe` is used for bi-directional communication between two processes. A `Queue` is used for multiple producers and consumers.
+
+```python
+from multiprocessing import Pool
+from functools import partial
+
+def square_number(n, multiplier):
+    return n * n * multiplier
+
+if __name__ == "__main__":
+    multiplier = 2
+    partial_square_number = partial(square_number, multiplier=multiplier)
     
+    with Pool(processes=4) as pool:  # Use 4 worker processes
+        results = pool.map(partial_square_number, range(10))
+        print(results)
+```
 
-- **Multiprocessing vs Multithreading:**
-  - **Memory Space:** Multiprocessing uses separate memory for each process, whereas multithreading shares memory within the process.
-  - **Overhead:** Process creation and context switching have a higher overhead in multiprocessing.
-  - **Use Case:** Multiprocessing is preferred for CPU-bound tasks, and multithreading is suited for I/O-bound tasks.
+### Multithreading
 
-- **asynchronous**
-    - **asyncio:** Python's built-in library for asynchronous I/O, providing an event loop and coroutines.
-    - **async/await:** Syntax for defining asynchronous functions and awaiting asynchronous operations.
-        - blocking call (`time.sleep(1)`), non-blocking call (`await asyncio.sleep(1)`)
-    - **aiohttp:** Asynchronous HTTP Client/Server framework that supports async/await syntax.
+Multithreading involves running multiple threads (lighter weight than processes) within the same process, sharing memory space.
 
+- **Key Component:**
+  - **threading**: Python module that provides a way of using threads to achieve concurrency. Threads share the same memory space and are lighter weight than processes.
+- **Synchronization Primitives:**
+  - **Lock** and **Semaphore**: Essential for preventing race conditions and ensuring thread safety by controlling access to shared resources.
 
-# Multiprocessing
-- Python `multiprocessing` module
-    - `Pool`
-    - `cpu_count`
-    - await
-- Python `functiontools` module
-    - `partial`
+### Multiprocessing vs Multithreading
 
-# Python multi-threading
-- threading.active_count() returns the number of active threads in the current process.
-- threading.acquire() and threading.release() can be used to acquire and release locks.
-- with statement can be used to acquire and release locks in a more concise manner. use this more often than acquire and release.
+- **Memory Space**: Separate for multiprocessing, shared for multithreading.
+- **Overhead**: Generally higher for multiprocessing due to the cost of starting and managing new processes.
+- **Use Case**: Multiprocessing is preferred for CPU-bound tasks, while multithreading is better suited for I/O-bound tasks.
 
+### Asynchronous Programming
+
+- **asyncio**: A library to write concurrent code using the async/await syntax.
+- **Key Concepts:**
+  - **async/await**: Enables asynchronous programming, allowing the program to run other tasks while waiting for an operation to complete.
+  - **Event Loop**: Orchestrates the execution of various tasks and handles all the I/O operations asynchronously.
+  - **Coroutines and Tasks**: The building blocks for asynchronous programming in Python.
+    - **Example Coroutine**:
+      ```python
+      async def fetch_data():
+          await asyncio.sleep(1)
+          return {'data': 'sample'}
+      ```
+
+### asyncio I/O and aiohttp
+
+- **asyncio I/O**: Facilitates non-blocking I/O operations, significantly improving the efficiency of I/O-bound tasks.
+- **aiohttp Usage**: For asynchronous HTTP requests. It supports both client and server-side operations.
+  - **Example aiohttp Client Usage**:
+    ```python
+    async def fetch_page(url):
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url) as response:
+                return await response.text()
+    ```
+
+This improved markdown format not only enhances readability but also provides clear, actionable information on the key components and use cases of Python's concurrency models, including practical examples of using `Pool` for multiprocessing, making HTTP requests with `aiohttp`, and writing coroutines.
+To enhance the quality of your markdown and add more detailed explanations for the concepts, I've reformatted and expanded on your notes. Here's an improved version that should make the information clearer and more comprehensive:
+
+---
+
+# Python Concurrency Implementations
+
+## Multiprocessing
+Explore the `multiprocessing` module in Python, which allows for the execution of multiple processes simultaneously, leveraging multiple CPU cores.
+
+- **Python `multiprocessing` module**:
+  - **`Pool`**: A convenient way to parallelize executing a function across multiple input values, distributing the input data across processes (data parallelism).
+  - **`cpu_count`**: Returns the number of CPU cores available on your system. This can be helpful to decide the number of processes to run in parallel.
+  - **`await`**: Not applicable here as `await` is used with asyncio for asynchronous programming. Multiprocessing deals with concurrent execution in separate processes.
+
+- **Python `functools` module**:
+  - **`partial`**: Used to create a partial function by fixing some portion of a function's arguments, which can be particularly useful in multiprocessing when you want to pass additional fixed arguments to the function being executed by the pool.
+
+## Python Multi-threading
+Multi-threading in Python allows multiple threads to run concurrently in a single process, sharing the same space.
+
+- **Key Functions**:
+  - `threading.active_count()`: Returns the number of Thread objects currently alive.
+  - The combination of `threading.Lock().acquire()` and `threading.Lock().release()` manages locks explicitly. However, using the `with` statement for lock management is more concise and less error-prone, as it ensures that the lock is released automatically.
+
+### Basic Threading Example
 <details>
-<summary>Basic threading example</summary>
+<summary>Click to expand</summary>
 
 ```python
 import threading
@@ -59,11 +127,11 @@ for i in range(5):
 for thread in threads:
     thread.join()
 ```
-
 </details>
 
+### Custom Thread Class Example
 <details>
-<summary>Custom thread class example</summary>
+<summary>Click to expand</summary>
 
 ```python
 import threading
@@ -89,127 +157,60 @@ for i in range(5):
 for thread in threads:
     thread.join()
 ```
-
 </details>
 
-
+### Threading with Lock Management
 <details>
-<summary>Custom thread class example</summary>
-  
-  ```python
+<summary>Click to expand</summary>
+
+```python
 import threading
 import time
 
 class ThreadSafeCounter:
-    """Thread-safe counter implementation."""
     def __init__(self):
         self.value = 0
         self.lock = threading.Lock()
 
-    def increment_with_lock(self, n):
-        """Increment the counter with a lock to prevent race conditions."""
+    def increment(self, n):
         for _ in range(n):
             with self.lock:
                 self.value += 1
 
-    def increment_no_lock(self, n):
-        """Increment the counter without a lock, leading to potential race conditions."""
-        for _ in range(n):
-            self.value += 1
-
-    def increment_with_lock_v2(self, n):
-        """Increment the counter with explicit lock acquisition and release.
-        acquire and lock can be very time consuming, so it is better to use with statement to avoid forgetting to release the lock."""
-        for _ in range(n):
-            self.lock.acquire()
-            try:
-                self.value += 1
-            finally:
-                self.lock.release()
-
-def run_threaded_increments(func, counter):
-    """Run the specified increment function in a multithreading context."""
-    threads = []
-    for _ in range(4):  # Create 4 threads
-        thread = threading.Thread(target=func, args=(counter, 100000))
-        threads.append(thread)
-
-    start_time = time.time()
+def run_threaded_increments(counter, increments):
+    threads = [threading.Thread(target=counter.increment, args=(increments,)) for _ in range(4)]
     for thread in threads:
         thread.start()
     for thread in threads:
         thread.join()
-    end_time = time.time()
-
-    print(f"Counter value: {counter.value}")
-    print(f"Execution time for {func.__name__}: {end_time - start_time} seconds")
 
 if __name__ == "__main__":
-    # Run tests with different increment strategies
-    for increment_method in [ThreadSafeCounter.increment_no_lock, ThreadSafeCounter.increment_with_lock, ThreadSafeCounter.increment_with_lock_v2]:
-        counter = ThreadSafeCounter()  # Create a new counter for each test
-        print(f"Running test with {increment_method.__name__}")
-        run_threaded_increments(increment_method, counter)
-
-  ```
+    counter = ThreadSafeCounter()
+    run_threaded_increments(counter, 100000)
+    print(f"Counter value: {counter.value}")
+```
 </details>
 
-# YAML
+## YAML
+YAML, a human-friendly data serialization standard, is widely used in configurations and data processing, supporting multiple documents within a single file with the `---` separator.
 
-Explore YAML, a human-friendly data serialization standard used in configurations and data processing.
+<details>
+<summary>Click to expand</summary>
 
-- [yaml tutorial with Python](https://python.land/data-processing/python-yaml)
-
-YAML enables storing multiple documents within a single file using the `---` separator, commonly used in Kubernetes definitions. YAML is widely used for configuration files and data serialization. It's easy to read and write, making it ideal for both developers and machines.
-
-An example config.yaml:
-```
+```yaml
 rest:
   url: "https://example.org/primenumbers/v1"
   port: 8443
 
 prime_numbers: [2, 3, 5, 7, 11, 13, 17, 19]
 ```
+</details>
 
-```
-{'rest': 
-  { 'url': 'https://example.org/primenumbers/v1',
-    'port': 8443
-  },
-  'prime_numbers': [2, 3, 5, 7, 11, 13, 17, 19]
-}
-```
-
-YAML is also crucial in orchestration, aiding in the management and coordination of complex systems and workflows.
-
-
-# AsyncIO & multithreading
-- [python asyncio](https://docs.python.org/3/library/asyncio.html)
-- [python socket](https://docs.python.org/3/library/socket.html)
-- [Python Coroutines and Tasks](https://docs.python.org/3/library/asyncio-task.html)
-
-- coroutine
-    - timeout
-- asyncio
-    - create_task
-    - sleep
-    - tasks
-    - gather
-    - wait
-    - shield
-- asyncio
-- aiohttp
-
+## AsyncIO & Multi-threading
+AsyncIO provides a framework for writing single-threaded concurrent code using coroutines, event loops, and I/O completion callbacks. Multi-threading runs multiple threads in a single process.
 
 ### Python `aiohttp` module
-`aiohttp` is an asynchronous HTTP Client/Server framework that supports async/await syntax.
+`aiohttp` is an asynchronous HTTP Client/Server framework that supports the async/await syntax, ideal for non-blocking HTTP requests.
 
-
-### Python Webscraper
-
-Leverage Python for web scraping, utilizing tools and APIs to extract data efficiently.
-
-- [Google Map API](https://developers.google.com/maps/documentation)
-- [Google Map scraping omakarcloud](https://github.com/omkarcloud/google-maps-scraper)
-- [Google Map scraping botsol](https://www.botsol.com/bots/google-maps-crawler)
-- [Google Map scraping Octoparse](https://www.octoparse.com/blog/google-maps-crawlers)
+# Python Web Scraper
+Leveraging Python for web scraping involves using libraries and APIs to extract data efficiently from web pages.
