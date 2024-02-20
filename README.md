@@ -5,6 +5,8 @@ Referenes:
 - [Zack's Notion Study notes](https://www.notion.so/Python-Java-Concurrency-b883552932a44086bbe859f88851ed28?pvs=4)
 - [Udemy course](https://www.udemy.com/course/concurrent-and-parallel-programming-in-python/learn/lecture/28328244#overview)
 - [Udemy course github code](https://github.com/PacktPublishing/Concurrent-and-Parallel-Programming-in-Python/tree/main)
+- [Python Asyncio: The Complete Guide](https://superfastpython.com/python-asyncio/)  
+- [Async IO in Python: A Complete Walkthrough](https://realpython.com/async-io-python/)
 - [Python multiprocessing official doc](https://docs.python.org/3/library/multiprocessing.html)
 - [Python threading official doc](https://docs.python.org/3/library/threading.html)
 - [Python asyncio official doc](https://docs.python.org/3/library/asyncio.html)
@@ -211,6 +213,23 @@ AsyncIO provides a framework for writing single-threaded concurrent code using c
 
 ### Python `aiohttp` module
 `aiohttp` is an asynchronous HTTP Client/Server framework that supports the async/await syntax, ideal for non-blocking HTTP requests.
+
+### Coroutine
+In Python, a coroutine is a special function that can be paused and resumed, allowing other code to run during the pauses. This can be useful for tasks that spend a lot of time waiting for something (like user input, file I/O, network responses, etc.), as it allows other tasks to make progress during the waiting periods.
+
+Coroutines in Python are defined using the async def syntax:
+```
+async def my_coroutine():
+    ...
+```
+Within a coroutine, the await keyword can be used to pause execution until some other function (often another coroutine) is complete:
+```
+async def my_coroutine():
+    await some_other_function()
+```
+When some_other_function() is called with the await keyword, my_coroutine() is paused. When some_other_function() is done, my_coroutine() is resumed where it left off.  
+
+
 
 # Python Web Scraper
 Leveraging Python for web scraping involves using libraries and APIs to extract data efficiently from web pages.
