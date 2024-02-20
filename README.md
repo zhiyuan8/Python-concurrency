@@ -232,4 +232,30 @@ When some_other_function() is called with the await keyword, my_coroutine() is p
 
 
 # Python Web Scraper
-Leveraging Python for web scraping involves using libraries and APIs to extract data efficiently from web pages.
+## Requirements of Massive Web Scraping:
+- **Efficiency**: Scrape 10,000 pages for each website
+- **Scalability**: Easy to expand to other websites or other information on the same page
+- **Automation**: Minimize human intervention
+- **Traceability**: Access to progress
+
+## Difficulties of Web Scraping:
+- **Site map**: How to obtain paths to target webpages
+- **Information per page**: How to access webpage content
+- **Non-human restriction**: E.g., Cloudflare
+
+## Solutions:
+1. **Obtain sitemap**:
+   - API calls: Examine network of websites
+   - Third-party tools: [pro-sitemaps.com](https://pro-sitemaps.com/)
+   - Graph search: TO DO
+
+2. **Access webpage content**:
+   | Tools | Speed | Universality | IP Rotation | Multi-threading Support |
+   | --- | --- | --- | --- | --- |
+   | Beautiful Soup | Fast | Low | No | Risky |
+   | Selenium (headless browser) | Slow (20-30s/page) | Medium | No | Risky |
+   | Smart Proxy (Residential) | Fast | Medium | Yes | Secured |
+   | Smart Proxy (web scrape) | Slow (30-40s/page) | High | Yes | Secured |
+   | Cloudflare local solver | Slow (30s+/page) | Very High | Yes | Multiple container |
+
+## Code Structure:
